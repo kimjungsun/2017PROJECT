@@ -10,7 +10,7 @@ ap2 ahead;
 tp thead1;
 tp thead2;
 char *Menu;
-
+int numS;
 
 void search(char *U,FILE *fp,FILE *fp2,FILE *fp3){
     int i=0;
@@ -66,55 +66,107 @@ void print(char *U){
 	if(i==0){
         mp m = p;
 	printf("%d %s %s %d %d\n",m->num,m->title,m->genre,m->year,m->time);
+
+	
 	if(m->director->directorP == NULL) printf("%s\n",m->director->director);
 	else printf("%s(%s)\n",m->director->director,m->director->directorP->birth);
+    
+	while(m->actor->next != NULL){
 	if(m->actor->next->actorP == NULL) printf("%s\n",m->actor->next->actor);
 	else printf("%s(%s)\n",m->actor->next->actor,m->actor->next->actorP->birth);
+    m->actor = m->actor->next;
+	}
 }
     else if(i==1){
 		dp m = p;
 	printf("%d / %s / %c / %s\n",m->num,m->director,m->sex,m->birth);
+	
+	while(m->title->next != NULL){
 	if(m->title->next->movieP == NULL) printf("%s\n",m->title->next->title);
 	else printf("%s(%d,%dmin)\n",m->title->next->title,m->title->next->movieP->year,m->title->next->movieP->time);
+	m->title = m->title->next;
 	}	
+	}
     else if(i==2){
 		ap m = p;
 	printf("%d / %s / %c / %s\n",m->num,m->actor,m->sex,m->birth);
+	
+	while(m->title->next != NULL){
 	if(m->title->next->movieP == NULL) printf("%s\n",m->title->next->title);
 	else printf("%s(%d,%dmin)\n",m->title->next->title,m->title->next->movieP->year,m->title->next->movieP->time);
-	
+	m->title = m->title->next;
+	}
 	}
 
 }
 void add(char *U){
 	char *option = strtok(U," ");
-    if(
-	
-	
-	
-	
-	
-	
-	void delete(char *U){
+	if(!strcmp(option,"m")) {
+        mp cur= malloc(sizeof(movie));
+        cur->title = malloc(sizeof(char)*30);
+        cur->genre = malloc(sizeof(char)*30);
+		cur->director = malloc(sizeof(directorlist));
+        cur->director->director = malloc(sizeof(char)*30);
+	    ap2 temp = malloc(sizeof(actors));
+		ap2 ahead = temp;
+		
+		cur->num = 13;
+		printf("TITLE > ");
+		scanf("%s",cur->title);
+		printf("GENRE > ");
+		scanf("%s",cur->genre);
+	    printf("DIRECTOR > ");
+        scanf("%s",cur->director->director);
+        cur->director->directorP= NULL;    	
+        printf("YEAR > ");
+		scanf("%d",&(cur->year));
+		printf("TIME > ");
+		scanf("%d",&(cur->time));
+         	getchar();
+		while(1){
+			printf("ACTORS >");
+			temp ->next = malloc(sizeof(actors));
+			temp->next->actor = malloc(sizeof(char)*30);
+			scanf("%[^\n]s",temp -> next->actor);
+	        getchar();
+			temp -> next -> actorP = NULL;
+			temp -> next ->next = NULL;
+		   if(!strcmp(temp->next->actor,"end")) {temp->next=NULL;break;}
+		  temp = temp->next;
+		} 
+		
+		cur->actor = ahead; 
+		cur->next = NULL;
+		addNode(&Mhead,cur);
+
+	}
+
+}
+
+void delete(char *U){
 	char *option = strtok(U," ");
 	int num = atoi(strtok(NULL," "));
 	if(!strcmp(option,"m")) {
 		mp cur = gotoNode(num,Mhead,"M");
 		if(cur == NULL) printf("No such record\n");
-		else deleteNode(Mhead,cur,"M");
+		else deleteNode(Mhead,num,"M");
 	}
 	else if(!strcmp(option,"d")) {
 		dp cur = gotoNode(num,Dhead,"D");
 		if(cur == NULL) printf("No such record\n");
-		else deleteNode(Dhead,cur,"D");
+		else deleteNode(Dhead,num,"D");
 	}
 	if(!strcmp(option,"a")) {
 	    ap cur = gotoNode(num,Ahead,"A");
 		if(cur == NULL) printf("No such record\n");
-		else deleteNode(Ahead,cur,"A");
+		else deleteNode(Ahead,num,"A");
 	}
 
 }
+void update(char *U){
+	char *option = strtok(U," ");
+	if(!strcmp(option,"m")){
+
 void end(){
 // 파일 저장 및 업데이트 관련 내용 작성 !! 
 
@@ -144,11 +196,7 @@ int main(){
 	init_list3(&Ahead);
 	actor_info(&Ahead,fp3);
 	
-	linkdirector(&Mhead,&Dhead);
-	linktitle(&Mhead,Dhead,"Dhead");
-	linktitle(&Mhead,Ahead,"Ahead");
-	linkactor(&Mhead,&Ahead);
-
+     
 	/* 메뉴 프롬프트 */
     int i;
 	char *Menu = malloc(sizeof(char)*50);
@@ -157,6 +205,10 @@ int main(){
 	printf("<input :search/print/add/update/delete/sort/save/end>\n");
 	while(1){
 		
+	linkdirector(&Mhead,&Dhead);
+	linktitle(&Mhead,Dhead,"Dhead");
+	linktitle(&Mhead,Ahead,"Ahead");
+	linkactor(&Mhead,&Ahead);
 		Menu = menu();
 		Menu2 = strtok(Menu," ");
         Menu3 = strtok(NULL,"\0");
