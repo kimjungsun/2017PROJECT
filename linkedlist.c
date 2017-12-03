@@ -82,8 +82,8 @@ void * gotoNode(int num,void *head,char *s){
 	return NULL;
 	}
 }
-void deleteNode(void *head,void *cur,char *s){
-
+void deleteNode(void *head,int num,char *s){
+    void *cur = gotoNode(num,head,s);
 	if(!strcmp(s,"M")){
 	mp tmp = (mp)head;
 	mp Cur = (mp)cur;
@@ -112,19 +112,60 @@ void deleteNode(void *head,void *cur,char *s){
 	free(Cur);
 	}
 	}
+void updateNode(void *tmp,void *tmp2,char *s){
+    if(!strcmp(s,"M")){
+	mp head = (mp)tmp;
+	mp cur = (mp)tmp2;
+	mp Cur  = gotoNode(2,head,"M");
+	
+	while(head->next != Cur)
+			head = head->next;
+		
+	deleteNode(head,2,"M");
+	cur -> next = head->next;
+	head-> next = cur;
+	}
 
+	else if(!strcmp(s,"D")){
+	dp head = (dp)tmp;
+	dp cur = (dp)tmp2;
+	dp Cur  = gotoNode(cur->num,head,"D");
+	
+	while(head->next != Cur)
+			head = head->next;
+		
+	deleteNode(head,cur->num,"D");
+	cur -> next = head->next;
+	head-> next = cur;
+	}
+	
+	else if(!strcmp(s,"A")){
+	ap head = (ap)tmp;
+	ap cur = (ap)tmp2;
+	ap Cur  = gotoNode(cur->num,head,"A");
+	
+	while(head->next != Cur)
+			head = head->next;
+		
+	deleteNode(head,cur->num,"A");
+	cur -> next = head->next;
+	head-> next = cur;
+	}
+
+}
 void movie_info(mp *head,FILE *fp,FILE *fp2){
     mp cur;
 	char *state= malloc(sizeof(char)*100);// 일단 임시적으로 add,update,,등을버려놓는곳
 	while(1){// 영화 정보 받기
 	char *s = malloc(sizeof(char)*100);// 파일에서 받은 라인 
-    
 	if(fgets(s,100,fp)){
 		s[strlen(s)-1] ='\0';
         cur = malloc(sizeof(movie));
 		cur->director = malloc(sizeof(directorlist));
 		state = strtok(s,":");
-		cur->num = atoi(strtok(NULL,":"));
+		printf("%s\n",state);
+		if(!strcmp(state,"add")){
+		cur->num = atoi(strtok(NULL,":")); 
 		cur->title=strtok(NULL,":");
 		cur->genre=strtok(NULL,":");
 	    cur->director->director = strtok(NULL,":");
@@ -135,7 +176,6 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
 		 ap2 ahead = temp;
 		 int i=0;
 		while(1){
-			
 			temp ->next = malloc(sizeof(actors));
 			temp -> next->actor = strtok(NULL,",");
 			temp -> next -> actorP = NULL;
@@ -147,7 +187,35 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
 		cur->next = NULL;
 		addNode(head,cur);
 	}
+		else if(!strcmp(state,"update")){
+		cur->num = atoi(strtok(NULL,":"));
+		cur->title=strtok(NULL,":");
+		cur->genre=strtok(NULL,":");
+	    cur->director->director = strtok(NULL,":");
+        cur->director->directorP= NULL;    	
+        cur->year = atoi(strtok(NULL,":"));
+		cur->time = atoi(strtok(NULL,":"));
+		 ap2 temp = malloc(sizeof(actors));
+		 ap2 ahead = temp;
+		 int i=0;
+		while(1){
+			temp ->next = malloc(sizeof(actors));
+			temp -> next->actor = strtok(NULL,",");
+			temp -> next -> actorP = NULL;
+			temp -> next ->next = NULL;
+		   if(temp->next->actor == NULL) {temp->next=NULL;break;}
+		  temp = temp->next;
+		}  
+		cur->actor = ahead; 
+		cur->next = NULL;
+		updateNode(*head,cur,"M");
+	}
+		else if(!strcmp(state,"delete")){
+				deleteNode(head,atoi(strtok(NULL,":")),"M");
+				}
+	}
 	else break;
+	
 	}
 }
 
