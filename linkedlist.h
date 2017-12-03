@@ -1,8 +1,9 @@
 
 #pragma  once 
 #pragma warning(disable:4996)
+void updateNode(void *,void *,char *);
 void *gotoNode(int,void *,char *);
-void deleteNode(void *,void *,char *);
+void deleteNode(void *,int,char *);
 void linkactor(mp *,ap *);
 void linktitle(mp *,void *,char *);
 void linkdirector(mp *,dp *);
