@@ -116,12 +116,12 @@ void updateNode(void *tmp,void *tmp2,char *s){
     if(!strcmp(s,"M")){
 	mp head = (mp)tmp;
 	mp cur = (mp)tmp2;
-	mp Cur  = gotoNode(2,head,"M");
+	mp Cur  = gotoNode(cur->num,head,"M");
 	
 	while(head->next != Cur)
 			head = head->next;
 		
-	deleteNode(head,2,"M");
+	deleteNode(head,cur->num,"M");
 	cur -> next = head->next;
 	head-> next = cur;
 	}
