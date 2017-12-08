@@ -1,4 +1,7 @@
 #include<stdio.h>
+#include<time.h>
+#include<fcntl.h>
+#include<unistd.h>
 #include<stdlib.h>
 #include<string.h>
 #include "datatype.h"
@@ -153,6 +156,142 @@ void updateNode(void *tmp,void *tmp2,char *s){
 	}
 
 }
+void mkList(mp head){
+		FILE *f = fopen("movielist.txt","w");	
+		mp cur = head;
+	while(cur ->next != NULL){
+		actors *temp = cur->next->actor;	
+		char *str = malloc(sizeof(char)*110);
+				sprintf(str,"%d:%s:%s:%s:%d:%d:",cur->next->num,cur->next->title,cur->next->genre,cur->next->director->director,cur->next->year,cur->next->time);
+				fputs(str,f);
+		int i=0;
+				while(temp->next!=NULL)
+				{
+					fputs(temp->next->actor,f);
+					if(i++) fputc(',',f);
+			   temp = temp->next;
+			}
+				cur = cur->next;
+	fputc('\n',f);
+	}
+	fclose(f);
+	
+	struct tm *t;
+	time_t timer;
+	timer = time(NULL);
+	t = localtime(&timer);
+	char *str = malloc(sizeof(char)*100);
+	char *str1 = malloc(sizeof(char)*100);
+    strcpy(str1,"movie_list.");
+	sprintf(str,"%d",(t->tm_year+1900));
+	sprintf(&str[4],"%d",(t->tm_mon+1));
+	sprintf(&str[6],"%02d",(t->tm_mday));
+	sprintf(&str[8],"%02d",(t->tm_hour));
+	sprintf(&str[10],"%02d",(t->tm_min));
+    strcat(str1,str);
+	f= fopen("movielist.txt","r");
+	
+	int fd =creat(str1,0644);
+	close(fd);
+	FILE *f3= fopen(str1,"w");
+	while(fgets(str,100,f)){
+			fputs(str,f3);
+			}
+	fclose(f);
+	fclose(f3);
+	printf("%s 저장되었습니다.\n",str1);
+}
+			
+void mkList2(dp head){
+		FILE *f = fopen("directorlist.txt","w");	
+		dp cur = head;
+	while(cur ->next != NULL){
+		titles *temp = cur->next->title;	
+		char *str = malloc(sizeof(char)*110);
+				sprintf(str,"%d:%s:%c:%s:",cur->next->num,cur->next->director,cur->next->sex,cur->next->birth);
+				fputs(str,f);
+		int i=0;
+				while(temp->next!=NULL)
+				{
+					fputs(temp->next->title,f);
+					if(i++) fputc(',',f);
+			   temp = temp->next;
+			}
+				cur = cur->next;
+	fputc('\n',f);
+	}
+	fclose(f);
+	
+	struct tm *t;
+	time_t timer;
+	timer = time(NULL);
+	t = localtime(&timer);
+	char *str = malloc(sizeof(char)*100);
+	char *str1 = malloc(sizeof(char)*100);
+    strcpy(str1,"actor_list.");
+	sprintf(str,"%d",(t->tm_year+1900));
+	sprintf(&str[4],"%d",(t->tm_mon+1));
+	sprintf(&str[6],"%02d",(t->tm_mday));
+	sprintf(&str[8],"%02d",(t->tm_hour));
+	sprintf(&str[10],"%02d",(t->tm_min));
+    strcat(str1,str);
+	f= fopen("directorlist.txt","r");
+	
+	int fd =creat(str1,0644);
+	close(fd);
+	FILE *f3= fopen(str1,"w");
+	while(fgets(str,100,f)){
+			fputs(str,f3);
+			}
+	fclose(f);
+	fclose(f3);
+	printf("%s 저장되었습니다.\n",str1);
+}
+void mkList3(ap head){
+		FILE *f = fopen("actorlist.txt","w");	
+		ap cur = head;
+	while(cur ->next != NULL){
+		titles *temp = cur->next->title;	
+		char *str = malloc(sizeof(char)*110);
+				sprintf(str,"%d:%s:%c:%s:",cur->next->num,cur->next->actor,cur->next->sex,cur->next->birth);
+				fputs(str,f);
+		int i=0;
+				while(temp->next!=NULL)
+				{
+					fputs(temp->next->title,f);
+					if(i++) fputc(',',f);
+			   temp = temp->next;
+			}
+				cur = cur->next;
+	fputc('\n',f);
+	}
+	fclose(f);
+	
+	struct tm *t;
+	time_t timer;
+	timer = time(NULL);
+	t = localtime(&timer);
+	char *str = malloc(sizeof(char)*100);
+	char *str1 = malloc(sizeof(char)*100);
+    strcpy(str1,"actor_list.");
+	sprintf(str,"%d",(t->tm_year+1900));
+	sprintf(&str[4],"%d",(t->tm_mon+1));
+	sprintf(&str[6],"%02d",(t->tm_mday));
+	sprintf(&str[8],"%02d",(t->tm_hour));
+	sprintf(&str[10],"%02d",(t->tm_min));
+    strcat(str1,str);
+	f= fopen("actorlist.txt","r");
+	
+	int fd =creat(str1,0644);
+	close(fd);
+	FILE *f3= fopen(str1,"w");
+	while(fgets(str,100,f)){
+			fputs(str,f3);
+			}
+	fclose(f);
+	fclose(f3);
+	printf("%s 저장되었습니다.\n",str1);
+}
 void movie_info(mp *head,FILE *fp,FILE *fp2){
     mp cur;
 	char *state= malloc(sizeof(char)*100);// 일단 임시적으로 add,update,,등을버려놓는곳
@@ -163,7 +302,6 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
         cur = malloc(sizeof(movie));
 		cur->director = malloc(sizeof(directorlist));
 		state = strtok(s,":");
-		printf("%s\n",state);
 		if(!strcmp(state,"add")){
 		cur->num = atoi(strtok(NULL,":")); 
 		cur->title=strtok(NULL,":");
@@ -174,7 +312,6 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
 		cur->time = atoi(strtok(NULL,":"));
 		 ap2 temp = malloc(sizeof(actors));
 		 ap2 ahead = temp;
-		 int i=0;
 		while(1){
 			temp ->next = malloc(sizeof(actors));
 			temp -> next->actor = strtok(NULL,",");
@@ -186,6 +323,8 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
 		cur->actor = ahead; 
 		cur->next = NULL;
 		addNode(head,cur);
+		curNum1 = (cur->num) + 1;
+		
 	}
 		else if(!strcmp(state,"update")){
 		cur->num = atoi(strtok(NULL,":"));
@@ -210,17 +349,19 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
 		cur->next = NULL;
 		updateNode(*head,cur,"M");
 	}
-		else if(!strcmp(state,"delete")){
-				deleteNode(head,atoi(strtok(NULL,":")),"M");
-				}
+    else if(!strcmp(state,"delete")){
+		deleteNode(*head,2,"M");
+		return ;
+	}
 	}
 	else break;
 	
 	}
+
 }
 
 
-void director_info(dp *head,FILE *fp){
+void director_info(dp *head,FILE *fp,FILE *fp2){
     dp cur;
 	char *state= malloc(sizeof(char)*100);// 일단 임시적으로 add,update,,등을버려놓는곳
 	while(1){// 영화 정보 받기
@@ -230,6 +371,7 @@ void director_info(dp *head,FILE *fp){
 		s[strlen(s)-1] ='\0';
     cur = malloc(sizeof(director));
 		state = strtok(s,":");
+		if(!strcmp(state,"add")){
 		cur->num = atoi(strtok(NULL,":"));
 		cur->director=strtok(NULL,":");
 		cur->sex=strtok(NULL,":")[0];
@@ -237,7 +379,6 @@ void director_info(dp *head,FILE *fp){
     tp temp = malloc(sizeof(titles));
 	temp->next = NULL;
 	tp thead = temp;
-	int i=0;
 		while(1){
 			temp->next = malloc(sizeof(titles));
 			temp -> next->title = strtok(NULL,",");
@@ -249,12 +390,34 @@ void director_info(dp *head,FILE *fp){
 		cur->title = thead;
 		cur->next = NULL;
 		addNode2(head,cur);
+	curNum2 = (cur->num)+1;
+		}
+		else if(!strcmp(state,"update")){
+		cur->num = atoi(strtok(NULL,":"));
+		cur->director = strtok(NULL,":");
+		cur->sex = strtok(NULL,":")[0];
+		cur->birth = strtok(NULL,":");
+		tp temp = malloc(sizeof(titles));
+		tp thead = temp;
+		int i = 0;
+		while(1){
+			temp -> next = malloc(sizeof(titles));
+			temp -> next -> title = strtok(NULL,",");
+			temp -> next ->movieP = NULL;
+			temp -> next->next = NULL;
+			if(temp->next->title ==NULL){temp->next= NULL; break;}
+			temp = temp->next;
+		}
+		cur->title = thead;
+		cur->next = NULL;
+		updateNode(*head,cur,"D");
 	}
-	else break;
-	}
+        
+		}
+		else break;
 }
-
-void actor_info(ap *head,FILE *fp){
+}
+void actor_info(ap *head,FILE *fp,FILE *fp2){
     ap cur;
 	char *state= malloc(sizeof(char)*100);// 일단 임시적으로 add,update,,등을버려놓는곳
 	while(1){// 영화 정보 받기
@@ -264,15 +427,14 @@ void actor_info(ap *head,FILE *fp){
 		s[strlen(s)-1]='\0';
     cur = malloc(sizeof(actor));
 		state = strtok(s,":");
+		if(!strcmp(state,"add")){
 		cur->num = atoi(strtok(NULL,":"));
 		cur->actor=strtok(NULL,":");
 		cur->sex=strtok(NULL,":")[0];
 		cur->birth=strtok(NULL,":");
-    	
 		tp temp = malloc(sizeof(titles));
 		tp thead = temp;
 		while(1){
-			
 			temp->next = malloc(sizeof(titles));
 			temp -> next->title = strtok(NULL,",");
 			temp -> next -> movieP = NULL;
@@ -283,6 +445,29 @@ void actor_info(ap *head,FILE *fp){
 		cur->title = thead;
 		cur->next = NULL;
 		addNode3(head,cur);
+	curNum3 = (cur->num)+1;
+	}
+		else if(!strcmp(state,"update")){
+		cur->num = atoi(strtok(NULL,":"));
+		cur->actor = strtok(NULL,":");
+		cur->sex = strtok(NULL,":")[0];
+		cur->birth = strtok(NULL,":");
+		tp temp = malloc(sizeof(titles));
+		tp thead = temp;
+		temp->next = NULL;
+		int i = 0;
+		while(1){
+			temp -> next = malloc(sizeof(titles));
+			temp -> next -> title = strtok(NULL,",");
+			temp -> next ->movieP = NULL;
+			temp -> next->next = NULL;
+			if(temp->next->title ==NULL){temp->next= NULL; break;}
+			temp = temp->next;
+		}
+		cur->title = thead;
+		cur->next = NULL;
+		updateNode(*head,cur,"A");
+		}
 	}
 	else break;
 	}
