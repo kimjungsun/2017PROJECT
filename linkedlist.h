@@ -1,6 +1,7 @@
 
 #pragma  once 
 #pragma warning(disable:4996)
+int curNum1,curNum2,curNum3;
 void updateNode(void *,void *,char *);
 void *gotoNode(int,void *,char *);
 void deleteNode(void *,int,char *);
@@ -14,7 +15,10 @@ void movie_info(mp *,FILE *,FILE *);
 void init_list2(dp *);
 void init_titlelist(tp *);
 void addNode2(dp *,dp);
-void director_info(dp *,FILE *);
+void director_info(dp *,FILE *,FILE *);
 void init_list3(ap *);
 void addNode3(ap *,ap);
-void actor_info(ap *,FILE *);
+void actor_info(ap *,FILE *,FILE *);
+void mkList(mp);
+void mkList2(dp);
+void mkList3(ap);
