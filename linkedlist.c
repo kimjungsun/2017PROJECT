@@ -156,6 +156,453 @@ void updateNode(void *tmp,void *tmp2,char *s){
 	}
 
 }
+
+/*void sortNode(){
+	FILE *f = fopen("movie","r");
+	char **p = malloc(sizeof(char *)*10);
+	char *tmp = malloc(sizeof(char)*100);
+	char *str = malloc(sizeof(char)*100);
+	for(int i=0;i<10;i++)
+		p[i] = malloc(sizeof(char)*100);
+
+	int n=0;
+	fgets(str,100,f);
+		printf("%s\n",str);
+	while(1){
+		if(!n) strtok(str,":");
+		p[n] =strtok(NULL,":");
+		printf("%s\n",p[n]);
+		if(p[n] == NULL) { break;}
+	n++; 
+	}
+	n--;
+printf("%d\n",n);	
+	fclose(f);
+	for(int i=0; i<n-1; i++ )
+	{
+		for( int j=0; j<n-1-i; j++ )
+		{
+			if( strcmp( p[j], p[j+1]) > 0 )
+			{
+				tmp = p[j];
+				p[j] = p[j+1];
+				p[j+1] = tmp ;
+			}
+		}
+	}
+	for(int i=0;i<4;i++)
+		printf("%s\n",p[i]);
+
+}*/
+void sorting(char **p,int *q,int n){	
+	char  *tmp= malloc(sizeof(char)*40);
+	int num;
+for(int i=0; i<n-1; i++ )
+	{
+		for( int j=0; j<n-1-i; j++ )
+		{
+			if( strcmp( p[j], p[j+1]) > 0 )
+			{
+				tmp = p[j];
+				p[j] = p[j+1];
+				p[j+1] = tmp ;
+				num = q[j];
+				q[j] = q[j+1];
+				q[j+1] = num;
+			}
+		}
+	}
+for(int i=0;i<n;i++)
+	printf("%d\n",q[i]);
+
+}
+void sortNode(void *hd,char *st,char *option,char *f){
+	char **p = malloc(sizeof(char *)*10);
+	int *q= malloc(sizeof(int)*10);
+	char *str = malloc(sizeof(char)*100);
+	for(int i=0;i<10;i++)
+	p[i] = malloc(sizeof(char)*100);
+	int n=0;
+	char *file = malloc(sizeof(char)*30);
+	if(!strcmp(st,"M")){
+	if(f==NULL) {
+		strcpy(file,"movie_list");
+		printf("%s\n",file);}
+	else strcpy(file,f);
+		mp head = hd; 
+
+	FILE *f = fopen("movielist.txt","r");
+	   fseek(f,0,SEEK_SET);
+	mp temp = head;
+	ap2 atemp = temp->next->actor;
+	 char *str = malloc(sizeof(char)*100);
+      int fd= creat(file,0644);    
+	close(fd);
+	   FILE *f1 = fopen(file,"w");
+     if(!option){
+	;	 // 일단 비운
+	}
+	else{
+			   if(option[0]=='t'){
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->title);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+						  }
+			   }
+			   
+			   else if(option[0]=='g'){
+				   printf("도착\n");
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->genre);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+			   else if(option[0]=='d'){
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->director->director);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+			   else if(option[0]=='y'){
+				   while(temp->next != NULL)
+				   {sprintf(p[n],"%d",temp->next->year);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+			   else if(option[0]=='r'){
+				   while(temp->next != NULL)
+				   {sprintf(p[n],"%d",temp->next->time);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+fclose(f1);
+fclose(f);
+	}
+	} 
+  else if(!strcmp(st,"D")){
+	if(f==NULL) {
+		strcpy(file,"director_list");
+		printf("%s\n",file);}
+	else strcpy(file,f);
+		dp head = hd; 
+
+	FILE *f = fopen("directorlist.txt","r");
+	   fseek(f,0,SEEK_SET);
+	dp temp = head;
+	 char *str = malloc(sizeof(char)*100);
+      int fd= creat(file,0644);    
+	close(fd);
+	   FILE *f1 = fopen(file,"w");
+     if(!option){
+	;	 // 일단 비운
+	}
+	else{
+			   if(option[0]=='n'){
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->director);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+						  }
+			   }
+			   
+			   else if(option[0]=='s'){
+				   while(temp->next != NULL)
+				    {   p[n]=&(temp->next->sex);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+			   else if(option[0]=='b'){
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->birth);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+	   fclose(f1);
+	   fclose(f);
+}
+}
+
+  else if(!strcmp(st,"A")){
+	if(f==NULL) {
+		strcpy(file,"actor_list");
+		printf("%s\n",file);}
+	else strcpy(file,f);
+		ap head = hd; 
+
+	FILE *f = fopen("actorlist.txt","r");
+	   fseek(f,0,SEEK_SET);
+	ap temp = head;
+	 char *str = malloc(sizeof(char)*100);
+      int fd= creat(file,0644);    
+	close(fd);
+	   FILE *f1 = fopen(file,"w");
+     if(!option){
+	;	 // 일단 비운
+	}
+	else{
+			   if(option[0]=='n'){
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->actor);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+						  }
+			   }
+			   
+			   else if(option[0]=='s'){
+				   while(temp->next != NULL)
+				    {   p[n]=&(temp->next->sex);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+			   else if(option[0]=='b'){
+				   while(temp->next != NULL)
+				   {strcpy(p[n],temp->next->birth);
+					   q[n]=temp->next->num;
+				   n++;
+				   temp = temp->next;}
+                   sorting(p,q,n);
+				   for(int i=0;i<n;i++){
+					   fseek(f,0,SEEK_SET);
+				   while(fgets(str,100,f)){
+						  if((str[0]-48)==q[i]) {fputs(str,f1);fputc('\n',f1); break;}
+						  }
+		   }
+			   }
+	   fclose(f1);
+	   fclose(f);
+}
+}
+}
+void saveNode(void *hd,char *st,char *option,char *f){
+		char *file = malloc(sizeof(char)*30);
+	if(!strcmp(st,"M")){
+	if(f==NULL) {
+		strcpy(file,"movie_list");
+		printf("%s\n",file);}
+	else strcpy(file,f);
+		mp head = hd; 
+	FILE *f = fopen("movielist.txt","r");
+	mp temp = head;
+	 char *str = malloc(sizeof(char)*100);
+      int fd= creat(file,0644);    
+	close(fd);
+	   FILE *f1 = fopen(file,"w");
+     if(!option){
+	  while(fgets(str,100,f)){
+		   fputs(str,f1);}
+		   fclose(f);
+		   fclose(f1);
+	}
+	else
+	   while(temp->next != NULL){
+	ap2 atemp = temp->next->actor;
+		   for(int i=0;i<strlen(option);i++){
+			   if(option[i]=='t'){
+				   fputs(temp->next->title,f1);
+				   fputs("/ ",f1);
+			   }
+			   else if(option[i]=='g'){
+			   fputs(temp->next->genre,f1);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='d'){
+			   fputs(temp->next->director->director,f1);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='y'){
+			   fprintf(f1,"%d",temp->next->year);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='r'){
+			   fprintf(f1,"%d",temp->next->time);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='a'){
+			   while(atemp->next != NULL){
+			     fputs(atemp->next->actor,f1);
+				 fputc(',',f1);
+			   atemp = atemp->next;
+			   }
+			} 
+		   } 
+		   fputc('\n',f1);
+	   temp = temp->next;
+	   }
+	   fclose(f1);
+	   fclose(f);
+}
+	else if(!strcmp(st,"D")){
+	if(f==NULL) strcpy(file,"director_list");
+	else strcpy(file,f);
+		dp head = (dp)hd;
+		dp temp = head;
+		FILE *f = fopen("directorlist.txt","r");
+     int fd =creat(file,0644);
+	 char *str = malloc(sizeof(char)*100);
+       close(fd);
+	   FILE *f1 = fopen(file,"w");
+     if(!option){
+	  while(fgets(str,100,f)){
+		   fputs(str,f1);}
+		   fclose(f);
+		   fclose(f1);
+	}
+	 else
+	   while(temp->next != NULL){
+		   tp ttemp = temp->next->title;
+		   for(int i=0;i<strlen(option);i++){
+			   if(option[i]=='n'){
+				   fputs(temp->next->director,f1);
+				   fputs("/ ",f1);
+			   }
+			   else if(option[i]=='s'){
+			   fputc(temp->next->sex,f1);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='b'){
+			   fputs(temp->next->birth,f1);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='m'){
+			   while(ttemp->next != NULL){
+			   fputs(ttemp->next->title,f1);
+			   fputc(',',f1);
+			  ttemp = ttemp->next;
+			} 
+			  }
+		   } 
+		   fputc('\n',f1);
+	   temp = temp->next;
+	   }
+fclose(f);
+fclose(f1);
+}
+   else	if(!strcmp(st,"A")){
+	if(f==NULL) strcpy(file,"actor_list");
+	else strcpy(file,f);
+	   ap head = (ap)hd;
+	   ap temp = head;
+		FILE *f = fopen("actorlist.txt","r");
+	 char *str = malloc(sizeof(char)*100);
+     int fd =creat(file,0644);
+       close(fd);
+	   FILE *f1 = fopen(file,"w");
+     if(!option){
+	  while(fgets(str,100,f)){
+		   fputs(str,f1);}
+		   fclose(f);
+		   fclose(f1);
+	}
+	else
+	   while(temp->next != NULL){
+		   tp ttemp = temp->next->title;
+		   for(int i=0;i<strlen(option);i++){
+			   if(option[i]=='n'){
+				   fputs(temp->next->actor,f1);
+				   fputs("/ ",f1);
+			   }
+			   else if(option[i]=='s'){
+			   fputc(temp->next->sex,f1);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='b'){
+			   fputs(temp->next->birth,f1);
+			   fputs("/ ",f1);
+		   }
+			   else if(option[i]=='m'){
+			   while(ttemp->next != NULL){
+				   printf("%s\n",ttemp->next->title);
+			   fputs(ttemp->next->title,f1);
+			   fputc(',',f1);
+			  ttemp = ttemp->next;
+			} 
+			  }
+		   }
+		   fputc('\n',f1);
+	   temp = temp->next;
+	   }
+fclose(f);
+fclose(f1);
+}
+}
 void mkList(mp head){
 		FILE *f = fopen("movielist.txt","w");	
 		mp cur = head;
@@ -350,7 +797,7 @@ void movie_info(mp *head,FILE *fp,FILE *fp2){
 		updateNode(*head,cur,"M");
 	}
     else if(!strcmp(state,"delete")){
-		deleteNode(*head,2,"M");
+		deleteNode(*head,atoi(strtok(NULL,":")),"M");
 		return ;
 	}
 	}
@@ -412,6 +859,8 @@ void director_info(dp *head,FILE *fp,FILE *fp2){
 		cur->next = NULL;
 		updateNode(*head,cur,"D");
 	}
+		else if(!strcmp(state,"delete")){
+			deleteNode(head,atoi(strtok(NULL,":")),"D"); }
         
 		}
 		else break;
@@ -468,6 +917,8 @@ void actor_info(ap *head,FILE *fp,FILE *fp2){
 		cur->next = NULL;
 		updateNode(*head,cur,"A");
 		}
+		else if(!strcmp("delete",state)){	
+		deleteNode(head,atoi(strtok(NULL,":")),"A") ;}
 	}
 	else break;
 	}

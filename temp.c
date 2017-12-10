@@ -17,6 +17,7 @@
 		FILE *f3 = fopen("actorlist.txt","r");
 		int i=0;
 		int check = 0;
+		int meta;
 		char *option = malloc(sizeof(char)*5);
 		option = NULL;
 		option = strtok(U," ");
@@ -36,6 +37,8 @@
 		char *st1 = malloc(sizeof(char)*100);
 		if(check) st1 = option;
 		else st1 = strtok(NULL,"\0");
+		meta = strlen(st1)-1;
+		if(st1[meta]=='*') st1 = strtok(st1,"*"); 
 		while(*fpa != NULL){
 		while(fgets(st,100,*fpa)!=NULL){
 			if(strstr(st,st1)){i++; printf("%s\n",st);}
@@ -523,9 +526,45 @@ void update(char *U){
 	return ;
 }
 
+void save(char *U){
+	char *str = strtok(U," ");
+	char *option = malloc(sizeof(char)*10);
+	option = strtok(NULL," ");
+	char *file =  malloc(sizeof(char)*30);
+    if(!strcmp(option,"-f")){
+	option = NULL;
+	file = strtok(NULL," ");
+	}
+	else {
+		if(strtok(NULL," ")) file = strtok(NULL," ");
+	else file = NULL;
+	}
+	if(!strcmp(str,"m")) saveNode(Mhead,"M",option,file);
+	else if(!strcmp(str,"d")) saveNode(Dhead,"D",option,file);
+	else if(!strcmp(str,"a")) saveNode(Ahead,"A",option,file);
+	else printf("No option '%s'. Try again.\n",str);
+}
+void sort(char *U){
+	char *str = strtok(U," ");
+	char *option = malloc(sizeof(char)*10);
+	option = strtok(NULL," ");
+	char *file =  malloc(sizeof(char)*30);
+    if(!strcmp(option,"-f")){
+	option = NULL;
+	file = strtok(NULL," ");
+	}
+	else {
+		if(strtok(NULL," ")) file = strtok(NULL," ");
+	else file = NULL;
+	}
+	printf("%s\n",option);
+	if(!strcmp(str,"m")) sortNode(Mhead,"M",option,file);
+	else if(!strcmp(str,"d")) sortNode(Dhead,"D",option,file);
+	else if(!strcmp(str,"a")) sortNode(Ahead,"A",option,file);
+    }
 void end(){
-// 파일 저장 및 업데이트 관련 내용 작성 !! 
 
+	printf("종료합니다\n");
 }
 char *menu(){
     printf("(movie)");
@@ -563,7 +602,7 @@ int main(){
 	char *Menu2 = malloc(sizeof(char)*50);
 	char *Menu3 = malloc(sizeof(char)*50);
 	printf("<input :search/print/add/update/delete/sort/save/end>\n");
-printf("\n");
+    printf("\n");
 	while(1){
 	linkdirector(&Mhead,&Dhead);
 	linktitle(&Mhead,Dhead,"Dhead");
@@ -577,8 +616,8 @@ printf("\n");
 		else if(!strcmp(Menu,"add")) add(Menu3);
 		else if(!strcmp(Menu,"update")) {update(Menu3);getchar();} 
 		else if(!strcmp(Menu,"delete")) delete(Menu3);
-		else if(!strcmp(Menu,"sort")) ;
-		else if(!strcmp(Menu,"save")) ;
+		else if(!strcmp(Menu,"sort")) sort(Menu3);
+		else if(!strcmp(Menu,"save")) save(Menu3);
 		else if(!strcmp(Menu,"end")){end(); break; }
 		else printf(" 메뉴명을 다시 입력하세요 \n");
 printf("\n");
