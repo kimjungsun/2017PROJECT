@@ -2,6 +2,8 @@
 #pragma  once 
 #pragma warning(disable:4996)
 int curNum1,curNum2,curNum3;
+int compare(const void *,const void *);
+void sortNode();
 void updateNode(void *,void *,char *);
 void *gotoNode(int,void *,char *);
 void deleteNode(void *,int,char *);
@@ -22,3 +24,6 @@ void actor_info(ap *,FILE *,FILE *);
 void mkList(mp);
 void mkList2(dp);
 void mkList3(ap);
+void saveNode(void *,char *,char *,char *);
+void sortNode(void *,char *,char *,char *);
+void sorting(char **,int *,int);
